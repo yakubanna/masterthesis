@@ -1,0 +1,245 @@
+%%
+%% General settings
+%%
+\usepackage{graphicx}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\usepackage{amsmath}
+
+% fonts
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont[Scale=0.9]{Consolas}
+
+% page layout
+\usepackage[top=20mm,bottom=20mm,left=30mm,right=10mm,includehead=false,includefoot=false]{geometry}
+
+% normal spaces after sentence ends, not increased
+\frenchspacing
+
+% Avoid some overfulls on long unbreakable pieces of text.
+% No effect on good paragraphs.
+\setlength{\emergencystretch}{0.5em}
+
+% etc.
+\RequirePackage{array}
+\RequirePackage[xetex,hidelinks]{hyperref}
+
+% title page: gap for filling
+\newcommand{\subline}[1]{\underline{\makebox[#1]{}}}
+
+%%
+%% Inequality signs
+%%
+\RequirePackage{amssymb}
+% redefine math <=, >= ops
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+
+%%
+%% Structure
+%%
+\newcounter{paragraphcounter}[subsection]
+
+\RequirePackage[explicit]{titlesec}
+
+\titleformat{\chapter}[display]
+    {\filcenter}
+    {\large\textbf{\MakeUppercase{\chaptertitlename} \thechapter}}
+    {8pt}
+    {\large\bfseries\MakeUppercase{#1}}{}
+
+\titleformat{\section}
+	{\large\bfseries}
+	{\thesection}
+	{1ex}
+	{#1}
+
+\titleformat{\subsection}
+	{\normalfont\bfseries}
+	{\thesubsection}
+	{1ex}
+	{#1}
+
+\titleformat{\paragraph}[runin]
+   {\normalsize\bfseries}
+   {}
+   {}
+   {\stepcounter{paragraphcounter}\arabic{paragraphcounter} #1}
+
+\titlespacing{\chapter}{0pt}{*0}{*7}
+\titlespacing{\section}{\parindent}{*3}{*1}
+\titlespacing{\subsection}{\parindent}{*2}{*1}
+\titlespacing{\paragraph}{\parindent}{*0}{*1}
+
+% Chapter with no number, but present in ToC
+\newcommand{\chapterNoNum}[1]{\chapter*{#1}\addcontentsline{toc}{chapter}{#1}}
+
+%%
+%% Appendix
+%%
+% Counter for appendix
+\newcounter{appendixcounter}
+\renewcommand{\theappendixcounter}{\Asbuk{appendixcounter}}
+
+\newcommand{\appenx}[1]{%
+    \refstepcounter{appendixcounter}%
+    \addcontentsline{toc}{section}{Приложение \theappendixcounter. #1}%
+    \hfill\MakeUppercase{Приложение \theappendixcounter}%
+    \begin{center}
+        \large\textbf{#1}
+    \end{center}
+}
+
+%%
+%% Abstract
+%%
+\newcommand{\referat}[1]{{\medskip\centering\bfseries\MakeUppercase{#1}\par}}
+
+%%
+%% Equation numbering: (1), (2), ... instead of (1.1), (1.2), ...
+%%
+\usepackage{amsmath}
+\counterwithout{equation}{section}
+
+%%
+%% Captions and numbering of figures and tables
+%%
+\RequirePackage{caption}
+\DeclareCaptionLabelSeparator{emdash}{~---~}
+\captionsetup{labelsep=emdash,font=small,labelfont=it}
+\captionsetup[table]{name=Таблица,justification=raggedright,singlelinecheck=off,aboveskip=0.5ex}
+\captionsetup[figure]{name=Рисунок}
+
+%%
+%% Table of contents
+%%
+% name
+\addto{\captionsrussian}{\renewcommand{\contentsname}{Оглавление}}
+
+%%
+%% Enumerations
+%%
+% set up lists, drop unnecessary spacing
+% please do not do \usepackage{enumerate}
+\RequirePackage[shortlabels]{enumitem}
+% "nosep" removes vertical spacing, "wide" makes items look like ordinary paragraphs
+\setlist{nosep,wide}
+
+%%
+%% Theorems
+%%
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+
+\newtheoremstyle{plainBoldItalicName}
+    {\topsep}   % ABOVESPACE
+    {\topsep}   % BELOWSPACE
+    {\itshape}  % BODYFONT
+    {0pt}       % INDENT (empty value is the same as 0pt)
+    {\bfseries} % HEADFONT
+    {.} % HEADPUNCT
+    {5pt plus 1pt minus 1pt} % HEADSPACE
+    {\upshape\thmname{#1}\thmnumber{ #2}\thmnote{ ({\itshape #3})}} % CUSTOM-HEAD-SPEC
+
+\theoremstyle{plainBoldItalicName}
+    \newtheorem{lemma}{\indent Лемма}
+    \newtheorem*{lemma*}{\indent Лемма}
+    
+    \newtheorem{theorem}{\indent Теорема}
+    \newtheorem*{theorem*}{\indent Теорема}
+    
+    \newtheorem{corollary}{\indent Следствие}[theorem]
+    \newtheorem*{corollary*}{\indent Следствие}
+
+\theoremstyle{remark}
+    \newtheorem{remark}{\indent Замечание}
+    \newtheorem*{remark*}{\indent Замечание}
+
+\theoremstyle{definition}
+    \newtheorem{definition}{\indent Определение}
+    \newtheorem*{definition*}{\indent Определение}
+    
+    \newtheorem{example}{\indent Пример}
+    \newtheorem*{example*}{\indent Пример}
+
+%%
+%% Bibliography
+%%
+\addto{\captionsrussian}{%
+    \renewcommand{\bibname}{Список использованной литературы}
+}
+
+% item numbers get inside paragraphs, no vertical spacing
+\renewenvironment{thebibliography}[1]%
+{
+    \chapterNoNum{\bibname}
+    \@mkboth{\bibname}{\bibname}
+    \begingroup\begin{enumerate}
+        \sloppy
+        \sfcode`\.\@m
+    }
+    {
+    \end{enumerate}\endgroup
+}
+
+%%
+%% Source code listings
+%%
+\RequirePackage{minted}
+
+% line numbers
+\renewcommand{\theFancyVerbLine}{\ttfamily%
+    \textcolor[rgb]{0.5,0.5,1.0}{%
+        \footnotesize\arabic{FancyVerbLine}%
+    }%
+}
+    
+\setminted{
+    fontsize=\small,
+    breaklines=true,
+    framesep=2mm,
+    frame=leftline,
+    framerule=2mm,
+    rulecolor=\color{gray!15}
+}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\renewcommand{\listingscaption}{Листинг}
+
+% protect page numbers inside minted code
+\renewcommand{\@oddfoot}{%
+    \parbox{\textwidth}{%
+        \rmfamily{{\hfil}\thepage\hfil}}%
+}%
+
+%%
+%% Counting figures and tables
+%%
+\usepackage{etoolbox}
+
+\newcounter{totfigures}
+\newcounter{tottables}
+
+\providecommand\totfig{} 
+\providecommand\tottab{}
+
+\AtEndDocument{%
+    \addtocounter{totfigures}{\value{figure}}%
+    \addtocounter{tottables}{\value{table}}%
+    \immediate\write\@mainaux{%
+        \string\gdef\string\totfig{\number\value{totfigures}}%
+        \string\gdef\string\tottab{\number\value{tottables}}%
+    }%
+}
+
+\pretocmd{\chapter}{\addtocounter{totfigures}{\value{figure}}\setcounter{figure}{0}}{}{}
+\pretocmd{\chapter}{\addtocounter{tottables}{\value{table}}\setcounter{table}{0}}{}{}
+
+%%
+%% MS Word-like math font
+%%
+%\RequirePackage{unicode-math}
+%\setmathfont{XITS Math}
